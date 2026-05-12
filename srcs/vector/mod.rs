@@ -36,3 +36,17 @@ impl<K: fmt::Display> fmt::Display for Vector<K>
         Ok(())
     }
 }
+
+impl<K: Clone> Clone for Vector<K> 
+{
+    fn clone(&self) -> Self {
+        Vector { data: self.data.clone() }
+    }
+}
+
+impl<K> len for Vector<K>
+{
+    fn len(&self) -> usize{
+        self.data.len()
+    }
+}

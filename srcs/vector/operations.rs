@@ -33,3 +33,26 @@ impl<K: Clone + Add<Output = K> + Sub<Output = K> + Mul<Output = K>> Vector <K>
         }       
     }
 }
+
+pub fn linear_combination<K>(u: &[Vector<K>], coefs: &[K]) -> Vector<K>
+where K: Clone + Add<Output = K>  + Mul<Output = K> + Sub
+{
+    let mut result: Vector<K> = u[0].clone();
+
+    if u.len() != coefs.len() {
+        panic!("undefined behaviour: cannot perform linear combination of different size Vector \n");
+    }
+    for v in u.iter() {
+        if v.data.len() != result.len() {
+            panic!("undefined behaviour: vector size mismatch");
+        }
+    }
+
+    result.scl(coefs[0].clone());
+    for (vec, coef)  in u.iter().zip(coefs.iter()).skip(1){
+        let mut tmp = vec.clone();
+        tmp.scl(coef.clone());
+        result.add(tmp);
+    }
+    result
+}

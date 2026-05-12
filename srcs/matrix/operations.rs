@@ -34,4 +34,3 @@ impl<K: Clone + Add<Output = K> + Sub<Output = K> + Mul<Output = K>> Matrix<K>
     }
 }
 
-
