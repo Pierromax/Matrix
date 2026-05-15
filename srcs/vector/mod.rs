@@ -44,7 +44,11 @@ impl<K: Clone> Clone for Vector<K>
     }
 }
 
-impl<K> len for Vector<K>
+pub trait Len {
+    fn len(&self) -> usize;
+}
+
+impl<K> Len for Vector<K>
 {
     fn len(&self) -> usize{
         self.data.len()

@@ -1,9 +1,10 @@
 use std::ops::Add;
 use std::ops::Sub;
 use std::ops::Mul;
+use vector::Len;
 use crate::vector::Vector;
 
-impl<K: Clone + Add<Output = K> + Sub<Output = K> + Mul<Output = K>> Vector <K>
+impl<K: Clone + Add<Output = K>> Vector <K>
 {
     pub fn add(&mut self, other: Vector <K>)
     {
@@ -14,7 +15,10 @@ impl<K: Clone + Add<Output = K> + Sub<Output = K> + Mul<Output = K>> Vector <K>
             self.data[i] = self.data[i].clone() + other.data[i].clone();
         }
     }
+}
 
+impl<K: Clone + Sub<Output = K>> Vector <K>
+{
     pub fn sub(&mut self, other: Vector <K>)
     {
 
@@ -25,7 +29,10 @@ impl<K: Clone + Add<Output = K> + Sub<Output = K> + Mul<Output = K>> Vector <K>
             self.data[i] = self.data[i].clone() - other.data[i].clone();
         }
     }
+}
 
+impl<K: Clone + Mul<Output = K>> Vector <K>
+{
     pub fn scl(&mut self, scale: K)
     {
         for i in 0..self.data.len(){
@@ -35,7 +42,7 @@ impl<K: Clone + Add<Output = K> + Sub<Output = K> + Mul<Output = K>> Vector <K>
 }
 
 pub fn linear_combination<K>(u: &[Vector<K>], coefs: &[K]) -> Vector<K>
-where K: Clone + Add<Output = K>  + Mul<Output = K> + Sub
+where K: Clone + Add<Output = K>  + Mul<Output = K>
 {
     let mut result: Vector<K> = u[0].clone();
 
@@ -54,5 +61,12 @@ where K: Clone + Add<Output = K>  + Mul<Output = K> + Sub
         tmp.scl(coef.clone());
         result.add(tmp);
     }
+
+    //avec mul_add pour precision et performance
+    // for (vec, &coef) in u.iter().zip(coefs.iter()) {
+    //     for i in 0..result.data.len() {
+    //         result.data[i] = coef.mul_add(vec.data[i], result.data[i]);
+    //     }
+    // }
     result
 }
