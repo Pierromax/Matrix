@@ -1,11 +1,9 @@
-use std::ops::Add;
-use std::ops::Sub;
-use std::ops::Mul;
-use crate::matrix::Matrix;
+use super::Matrix;
+use crate::core::{LinearOps, Scalar};
 
-impl<K: Clone + Add<Output = K> + Sub<Output = K> + Mul<Output = K>> Matrix<K>
+impl<K : Scalar> LinearOps<K> for Matrix<K>
 {
-    pub fn add(&mut self, other: Matrix<K>)
+    fn add(&mut self, other: Matrix<K>)
     {
         if self.rows != other.rows || self.cols != other.cols {
             return println!("undefined behaviour: cannot perform addition of different size matrix\n");
@@ -15,7 +13,7 @@ impl<K: Clone + Add<Output = K> + Sub<Output = K> + Mul<Output = K>> Matrix<K>
         }
     }
 
-    pub fn sub(&mut self, other: Matrix<K>)
+    fn sub(&mut self, other: Matrix<K>)
     {
 
         if self.rows != other.rows || self.cols != other.cols {
@@ -26,7 +24,7 @@ impl<K: Clone + Add<Output = K> + Sub<Output = K> + Mul<Output = K>> Matrix<K>
         }
     }
 
-    pub fn scl(&mut self, scale: K)
+    fn scl(&mut self, scale: K)
     {
         for i in 0..self.data.len(){
             self.data[i] = self.data[i].clone() * scale.clone();
