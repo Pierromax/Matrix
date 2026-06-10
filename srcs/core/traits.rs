@@ -1,13 +1,61 @@
-use std::ops::{Add, Sub, Mul};
+use std::ops::*;
+use std::default::Default;
 
 pub trait Scalar:
-    Clone + Add<Output = Self> + Sub<Output = Self> + Mul<Output = Self> {}
+    Default +
+    Clone + 
+    Copy +
+    PartialOrd +
+    Add<Output = Self> + 
+    Sub<Output = Self> + 
+    Mul<Output = Self> +
+    Neg<Output = Self> +
+    Div<Output = Self> +
+    AddAssign + From<f32>
+{
+    fn abs(&self) -> Self;
+    fn sqrt(&self) -> Self;
+}
 
 impl<T> Scalar for T
 where
-    T: Clone + Add<Output = T> + Sub<Output = T> + Mul<Output = T>,
+    T: Clone + 
+    Default +
+    Copy +
+    PartialOrd +
+    Add<Output = T> + 
+    Sub<Output = T> + 
+    Mul<Output = T> +
+    Neg<Output = T> +
+    Div<Output = T> +
+    AddAssign +
+    From<f32>
 {
+    fn abs(&self) -> Self {
+        if self < &T::default() {
+            -self.clone()
+        } else {
+            self.clone()
+        }
+    }
+    fn sqrt(&self) -> Self {
+        if self <= &T::default() {
+            return T::default()
+        }
+
+        let two = T::from(2.0);
+
+        // estimation initiale
+        let mut x = self.clone() / two.clone();
+
+        // nombre fixe d'itérations
+        for _ in 0..20 {
+            x = (x.clone() + self.clone() / x.clone()) / two.clone();
+        }
+        x
+    }
 }
+
 pub trait LinearOps<K>
 where K: Scalar
 {

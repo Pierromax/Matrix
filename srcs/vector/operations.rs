@@ -35,22 +35,45 @@ impl<K: Scalar> Vector<K> {
      * si result = 0 alors les vecteurs sont orthogonaux (perpendiculaires dans le plan)
      * si result > 0 alors les vecteurs sont dans le meme sens
      * si result < 0 alors les vecteurs sont dans le sens oppose */
-    pub fn dot(&self, other: Vector<K>) -> K {
+    pub fn dot(&self, other: &Vector<K>) -> K {
         if self.data.len() != other.data.len() {
             panic!("undefined behaviour: cannot perform dot product of different size Vector \n");
         }
-        let mut result = self.data[0].clone() * other.data[0].clone();
-        for i in 1..self.data.len() {
-            result = result + self.data[i].clone() * other.data[i].clone();
+        let mut result = K::default();
+        let a = &self.data;
+        let b = &other.data;
+        for i in 0..a.len() {
+            result += a[i] * b[i];
         }
         result
     }
-
+    //norme taxicab (calcul distance a parcourir d'un taxi dans les rues quadrille de manhattan)
     pub fn norm_1(&self) -> K{
-        let mut norm;
+        let mut norm: K = K::default();
 
         for i in self.data.iter(){
             norm += i.abs();
+        }
+        norm
+    }
+    //norme euclidienne (calcul disatnce a vol d'oiseau)
+    pub fn norm(&self) -> K{
+        let mut norm: K = K::default();
+
+        for &i in self.data.iter(){
+            norm += i * i;
+        }
+        norm.sqrt()
+    }
+    //norme infinie(calucul de la plus grande composante du vecteur)
+    pub fn norm_inf(&self) -> K{
+        let mut norm = K::default();
+
+        for &i in self.data.iter(){
+            let abs_i = i.abs();
+            if abs_i > norm {
+                norm = abs_i;
+            }
         }
         norm
     }
@@ -81,4 +104,15 @@ where
         result.add(tmp);
     }
     result
+}
+
+pub fn angle_cos<K>(u: &Vector<K>, v: &Vector<K>) -> K
+where
+    K: Scalar,
+{
+    let denom = u.norm() * v.norm();
+    if denom == K::default(){   
+        return K::default();
+    }
+    u.dot(v) / denom
 }
