@@ -27,7 +27,7 @@ impl<K: Scalar> LinearOps<K> for Vector<K> {
         for i in 0..self.data.len() {
             self.data[i] = self.data[i].clone() * scale.clone();
         }
-    }
+    }       
 }
 
 impl<K: Scalar> Vector<K> {
@@ -115,4 +115,24 @@ where
         return K::default();
     }
     u.dot(v) / denom
+}
+
+pub fn cross_product<K>(u: &Vector<K>, v: &Vector<K>) -> Vector<K>
+where 
+    K: Scalar,
+{
+    let is_3d: bool = u.data.len() == 3 && v.data.len() == 3;
+
+    if !is_3d {
+        panic!("undefined behaviour: cross product is only defined for 3D vectors \n");
+    }
+
+    let a = u.data.clone();
+    let b = v.data.clone();
+
+    let x = a[1] * b[2] - a[2] * b[1];
+    let y = a[2] * b[0] - a[0] * b[2];
+    let z = a[0] * b[1] - a[1] * b[0];
+
+    Vector::from([x, y, z])
 }

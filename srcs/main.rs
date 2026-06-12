@@ -1,7 +1,6 @@
-use crate::core::operations::lerp;
-use crate::core::traits::LinearOps;
-use crate::vector::operations::{linear_combination, angle_cos};
-use crate::{matrix::Matrix, vector::Vector};
+use crate::core::*;
+use crate::vector::*;
+use crate::matrix::*;
 
 mod core;
 mod matrix;
@@ -174,6 +173,98 @@ fn ex05(){
     println!("expected value = 0.974631846\n");
 }
 
+fn ex06(){
+    println!("\n=====ex06====");
+    let u = Vector::from([0., 0., 1.]);
+    let v = Vector::from([1., 0., 0.]);
+    println!("{}", cross_product(&u, &v));
+    // [0.]
+    // [1.]
+    // [0.]
+    let u = Vector::from([1., 2., 3.]);
+    let v = Vector::from([4., 5., 6.]);
+    println!("{}", cross_product(&u, &v));
+    // [-3.]
+    // [6.]
+    // [-3.]
+    let u = Vector::from([4., 2., -3.]);
+    let v = Vector::from([-2., -5., 16.]);
+    println!("{}", cross_product(&u, &v));
+    // [17.]
+    // [-58.]
+    // [-16.]
+}
+
+fn ex07() {
+    println!("\n=====ex07====");
+
+    let mut u = Matrix::from([[1., 0.], [0., 1.]]);
+    let v = Vector::from([4., 2.]);
+    println!("1. {}", u.mul_vec(v));
+    // [4.]
+    // [2.]
+    println!("expected value: \n[4.]\n[2.]\n");
+
+    let mut u = Matrix::from([[2., 0.], [0., 2.]]);
+    let v = Vector::from([4., 2.]);
+    println!("2. {}", u.mul_vec(v));
+    // [8.]
+    // [4.]
+    println!("expected value: \n[8.]\n[4.]\n");
+
+    let mut u = Matrix::from([[2., -2.], [-2., 2.]]);
+    let v = Vector::from([4., 2.]);
+    println!("3. {}", u.mul_vec(v));
+    // [4.]
+    // [-4.]
+    println!("expected value: \n[4.]\n[-4.]\n");
+
+    let mut u = Matrix::from([[1., 0.], [0., 1.]]);
+    let v = Matrix::from([[1., 0.], [0., 1.]]);
+    println!("4. {}", u.mul_mat(v));
+    // [1., 0.]
+    // [0., 1.]
+    println!("expected value: \n[1., 0.]\n[0., 1.]\n");
+
+    let mut u = Matrix::from([[1., 0.], [0., 1.]]);
+    let v = Matrix::from([[2., 1.], [4., 2.]]);
+    println!("5. {}", u.mul_mat(v));
+    // [2., 1.]
+    // [4., 2.]
+    println!("expected value: \n[2., 1.]\n[4., 2.]\n");
+
+    let mut u = Matrix::from([[3., -5.], [6., 8.]]);
+    let v = Matrix::from([[2., 1.], [4., 2.]]);
+    println!("6. {}", u.mul_mat(v));
+    // [-14., -7.]
+    // [44., 22.]
+    println!("expected value: \n[-14., -7.]\n[44., 22.]\n");
+}
+
+fn ex08() {
+    println!("\n=====ex08====");
+    let u = Matrix::from([
+[1., 0.],
+[0., 1.],
+]);
+println!("{}", u.trace());
+// 2.0
+let u = Matrix::from([
+[2., -5., 0.],
+[4., 3., 7.],
+[-2., 3., 4.],
+]);
+println!("{}", u.trace());
+// 9.0
+let u = Matrix::from([
+[-2., -8., 4.],
+[1., -23., 4.],
+[0., 6., 4.],
+]);
+println!("{}", u.trace());
+// -21.0
+}
+
 fn main() {
     ex00();
     ex01();
@@ -181,4 +272,7 @@ fn main() {
     ex03();
     ex04();
     ex05();
+    ex06();
+    ex07();
 }
+
