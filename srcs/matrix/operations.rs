@@ -88,7 +88,7 @@ impl<K: Scalar> Matrix::<K>
         let data = self.data.clone();
         for i in 0..self.rows {
             sum += data[i * self.cols + i].clone();
+        }
         sum
-    }
     }
 }   
